@@ -1,45 +1,49 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { StyleSheet, Text, View } from 'react-native';
+import TodoInput from "./src/components/TodoInput.tsx";
+import {useState} from "react";
+import { Todo } from './src/types';
+import TodoList from "./src/components/TodoList.tsx";
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+function App(): React.JSX.Element {
+  const [todoList, setTodoList] = useState<Todo[]>([]);
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const addTodo = (text: string) => {
+    console.log(text);
 
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
+    setTodoList([
+        ...todoList,
+      {
+        id: Date.now().toString(),
+        text,
+        completed: false,
+      }
+    ])
+  }
 
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
+  console.log(todoList);
 
   return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Todo App</Text>
+        <TodoInput onAddTodo={addTodo}/>
+        <TodoList todoList={todoList}/>
+      </View>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20
   },
+  headerText: {
+    marginTop: 40,
+    marginBottom: 20,
+    textAlign: "center",
+    fontSize: 24,
+    fontWeight: "bold"
+  }
 });
 
 export default App;
