@@ -8,7 +8,7 @@ function App(): React.JSX.Element {
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
   const addTodo = (text: string) => {
-    console.log(text);
+    //console.log(text);
 
     setTodoList([
         ...todoList,
@@ -20,13 +20,43 @@ function App(): React.JSX.Element {
     ])
   }
 
-  console.log(todoList);
+  //console.log(todoList);
+
+  const editTodo = (id: string, newText: string) => {
+      console.log(id, newText, 'from app.tsx');
+      setTodoList(
+          todoList.map(item => item.id === id ? {
+              ...item,
+              text: newText,
+          } : item)
+      )
+  }
+
+  const deleteTodo= (id: string) =>{
+    //console.log(id);
+    setTodoList(todoList.filter(item => item.id !== id));
+  }
+
+  const toggleTodo = (id: string) =>  {
+    setTodoList(todoList.map(item =>
+        item.id === id
+            ? {
+              ...item,
+              completed: !item.completed,
+            }
+          : item,
+    ))
+  }
 
   return (
       <View style={styles.container}>
         <Text style={styles.headerText}>Todo App</Text>
         <TodoInput onAddTodo={addTodo}/>
-        <TodoList todoList={todoList}/>
+        <TodoList
+            todoList={todoList}
+            onEditTodo={editTodo}
+            onDeleteTodo={deleteTodo}
+            onToggleTodo={toggleTodo}/>
       </View>
 
   );
